@@ -17,7 +17,7 @@ export default class Login extends Component{
     signIn = () => {
 
 
-        const data = { email: this.email, password: this.password, conpassword: this.conpassword };
+        const data = { email: this.email, password: this.password};
 
 
         const requestInfo = {
@@ -32,6 +32,7 @@ export default class Login extends Component{
         if(response.ok){
             return response.json()
         }
+        throw new Error("Login inválido...");
         
     })
     .then(token => {
@@ -39,6 +40,10 @@ export default class Login extends Component{
         this.props.history.push("/admin");
         return;
     })
+    .catch(e => {
+        this.setState({message:e.message});
+
+    });
     
     }
 
@@ -61,6 +66,12 @@ export default class Login extends Component{
                     </FormGroup>
                     
                     <Button color="primary" block onClick={this.signIn}>Entrar</Button>
+                    
+                    {
+                        this.state.message !==''? (
+                        <Alert color="danger" className="text-center">{this.state.message}</Alert>
+                        ): ''
+                    }
                 </Form>
             </div>
         )
